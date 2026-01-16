@@ -1,4 +1,4 @@
-use ::entity::entity::users;
+use ::cf_entity::entity::users;
 use sea_orm::prelude::Uuid;
 use sea_orm::*;
 

@@ -9,7 +9,7 @@ echo "======================================"
 echo ""
 echo "Step 1: Running database migrations..."
 cd /app
-/app/bin/hub-be-migration
+/app/bin/cf-migration
 
 if [ $? -ne 0 ]; then
     echo "❌ Database migration failed!"
@@ -22,6 +22,6 @@ echo "✅ Database migrations completed successfully!"
 cd /app
 echo ""
 echo "Step 2: Starting API server..."
-echo "  - API will start on port 9773"
+echo "  - API will start on port 3000"
 echo ""
-exec /app/bin/hub-be-api
+exec /app/bin/cf-api

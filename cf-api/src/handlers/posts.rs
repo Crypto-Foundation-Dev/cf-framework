@@ -11,7 +11,7 @@ use actix_web::{HttpResponse, Responder, delete, get, post, put, web};
     params(PaginationParam),
     tag = "post",
     responses(
-        (status = 200, description = "List posts", body = ResponseApi<Vec<entity::entity::posts::Model>>),
+        (status = 200, description = "List posts", body = ResponseApi<Vec<cf_entity::entity::posts::Model>>),
     )
 )]
 #[get("")]
@@ -35,7 +35,7 @@ pub async fn get_all_posts(
     path = "/api/posts/{id}",
     tag = "post",
     responses(
-        (status = 200, description = "Get post", body = ResponseApi<entity::entity::posts::Model>),
+        (status = 200, description = "Get post", body = ResponseApi<cf_entity::entity::posts::Model>),
         (status = 404, description = "Post not found")
     )
 )]
@@ -58,7 +58,7 @@ pub async fn get_post(
     request_body = CreatePostRequest,
     tag = "post",
     responses(
-        (status = 201, description = "Post created", body = ResponseApi<entity::entity::posts::Model>),
+        (status = 201, description = "Post created", body = ResponseApi<cf_entity::entity::posts::Model>),
     )
 )]
 #[post("")]
@@ -80,7 +80,7 @@ pub async fn create_post(
     tag = "post",
     request_body = UpdatePostRequest,
     responses(
-        (status = 200, description = "Post updated", body = ResponseApi<entity::entity::posts::Model>),
+        (status = 200, description = "Post updated", body = ResponseApi<cf_entity::entity::posts::Model>),
     )
 )]
 #[put("/{id}")]

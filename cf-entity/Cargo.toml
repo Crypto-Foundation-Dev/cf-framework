@@ -1,10 +1,10 @@
 [package]
-name = "entity"
+name = "cf-entity"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-util = {path = "../util"}
+cf-util = {path = "../cf-util"}
 tokio = {workspace = true}
 dotenvy = {workspace = true}
 sea-orm = {workspace = true}

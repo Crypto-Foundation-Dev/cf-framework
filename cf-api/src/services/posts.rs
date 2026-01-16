@@ -1,8 +1,8 @@
 use crate::config::custom_error::AppError;
 use crate::dto::posts::{CreatePostRequest, UpdatePostRequest};
-use entity::entity::posts;
-use entity::entity::sea_orm_active_enums::PostStatus;
-use repository::repositories::PostsRepository;
+use cf_entity::entity::posts;
+use cf_entity::entity::sea_orm_active_enums::PostStatus;
+use cf_repository::repositories::PostsRepository;
 use sea_orm::{DatabaseConnection, IntoActiveModel, Set};
 use std::sync::Arc;
 use uuid::Uuid;

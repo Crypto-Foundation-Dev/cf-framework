@@ -1,11 +1,11 @@
 [workspace]
 resolver = "2"
 members = [
-    "api",
-    "entity",
-    "migration",
-    "repository",
-    "util",
+    "cf-api",
+    "cf-entity",
+    "cf-migration",
+    "cf-repository",
+    "cf-util",
 ]
 
 [workspace.dependencies]

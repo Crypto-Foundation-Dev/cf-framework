@@ -11,7 +11,7 @@ use actix_web::{HttpResponse, Responder, delete, get, post, put, web};
     params(PaginationParam),
     tag = "user",
     responses(
-        (status = 200, description = "List users", body = ResponseApi<Vec<entity::entity::users::Model>>),
+        (status = 200, description = "List users", body = ResponseApi<Vec<cf_entity::entity::users::Model>>),
     )
 )]
 #[get("")]
@@ -35,7 +35,7 @@ pub async fn get_all_users(
     path = "/api/users/{id}",
     tag = "user",
     responses(
-        (status = 200, description = "Get user", body = ResponseApi<entity::entity::users::Model>),
+        (status = 200, description = "Get user", body = ResponseApi<cf_entity::entity::users::Model>),
         (status = 404, description = "User not found")
     )
 )]
@@ -58,7 +58,7 @@ pub async fn get_user(
     request_body = CreateUserRequest,
     tag = "user",
     responses(
-        (status = 201, description = "User created", body = ResponseApi<entity::entity::users::Model>),
+        (status = 201, description = "User created", body = ResponseApi<cf_entity::entity::users::Model>),
     )
 )]
 #[post("")]
@@ -80,7 +80,7 @@ pub async fn create_user(
     tag = "user",
     request_body = UpdateUserRequest,
     responses(
-        (status = 200, description = "User updated", body = ResponseApi<entity::entity::users::Model>),
+        (status = 200, description = "User updated", body = ResponseApi<cf_entity::entity::users::Model>),
     )
 )]
 #[put("/{id}")]

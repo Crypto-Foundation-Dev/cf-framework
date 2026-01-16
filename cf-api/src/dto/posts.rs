@@ -1,4 +1,4 @@
-use entity::entity::sea_orm_active_enums::PostStatus;
+use cf_entity::entity::sea_orm_active_enums::PostStatus;
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 use uuid::Uuid;

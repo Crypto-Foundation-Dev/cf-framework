@@ -1,12 +1,12 @@
 [package]
-name = "migration"
+name = "cf-migration"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.85.0"
 publish = false
 
 [lib]
-name = "migration"
+name = "cf_migration"
 path = "src/lib.rs"
 
 [dependencies]

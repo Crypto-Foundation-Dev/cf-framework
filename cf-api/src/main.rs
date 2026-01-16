@@ -4,12 +4,12 @@ use crate::routes::routes::main_routes;
 use crate::services::posts::PostService;
 use crate::services::users::UserService;
 use actix_cors::Cors;
-use actix_web::{App, HttpResponse, HttpServer, web};
+use actix_web::{web, App, HttpResponse, HttpServer};
+use cf_migration::{Migrator, MigratorTrait};
+use cf_util::intro;
 use dotenvy::dotenv;
-use migration::{Migrator, MigratorTrait};
 use std::sync::Arc;
 use std::{env, process};
-use util::intro;
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
@@ -20,9 +20,9 @@ mod routes;
 mod services;
 mod structs;
 
-use entity::entity::posts::Model as PostModel;
-use entity::entity::sea_orm_active_enums::PostStatus;
-use entity::entity::users::Model as UserModel;
+use cf_entity::entity::posts::Model as PostModel;
+use cf_entity::entity::sea_orm_active_enums::PostStatus;
+use cf_entity::entity::users::Model as UserModel;
 
 // Define OpenAPI spec
 #[derive(OpenApi)]

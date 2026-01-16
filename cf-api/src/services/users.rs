@@ -1,7 +1,7 @@
 use crate::config::custom_error::AppError;
 use crate::dto::users::{CreateUserRequest, UpdateUserRequest};
-use entity::entity::users;
-use repository::repositories::UsersRepository;
+use cf_entity::entity::users;
+use cf_repository::repositories::UsersRepository;
 use sea_orm::{DatabaseConnection, IntoActiveModel, Set};
 use std::sync::Arc;
 use uuid::Uuid;
