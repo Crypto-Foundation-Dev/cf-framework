@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: framework-template
+  namespace: default
+  labels:
+    app: framework
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: framework
+  template:
+    metadata:
+      labels:
+        app: framework
+    spec:
+      containers:
+        - name: api
+          image: framework-template:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: framework-config
+            - secretRef:
+                name: framework-secret
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20

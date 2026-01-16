@@ -1,0 +1,48 @@
+# Rustfmt configuration
+# https://rust-lang.github.io/rustfmt/
+
+# Edition of Rust to use for parsing
+edition = "2021"
+
+# Maximum line width
+max_width = 100
+
+# Use spaces for indentation
+hard_tabs = false
+tab_spaces = 2
+
+# Newline style
+newline_style = "Unix"
+
+# Trailing commas
+trailing_comma = "Vertical"
+
+# Imports formatting
+imports_granularity = "Crate"
+group_imports = "StdExternalCrate"
+reorder_imports = true
+reorder_modules = true
+
+# Struct and enum formatting
+struct_lit_single_line = true
+enum_discrim_align_threshold = 20
+
+# Function formatting
+fn_params_layout = "Tall"
+fn_single_line = false
+
+# Use field init shorthand
+use_field_init_shorthand = true
+
+# Format string literals
+format_strings = false
+
+# Merge derives
+merge_derives = true
+
+# Force multiline blocks
+force_multiline_blocks = false
+
+# Comment formatting
+wrap_comments = false
+normalize_comments = false

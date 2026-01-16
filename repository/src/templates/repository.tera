@@ -1,0 +1,120 @@
+use sea_orm::*;
+use sea_orm::prelude::*;
+use hub_be_entity::entity::{{ table_name }};
+
+#[allow(dead_code)]
+pub struct {{ entity_name }}Repository;
+
+#[allow(dead_code)]
+impl {{ entity_name }}Repository {
+    /// Get all with pagination
+    pub async fn get_all<T>(
+        db: &DbConn,
+        page: u64,
+        per_page: u64,
+        filter: Option<Condition>,
+    ) -> Result<(Vec<T>, u64), DbErr>
+    where
+        T: FromQueryResult + Send + Sync,
+    {
+        let mut query = {{ table_name }}::Entity::find();
+
+        if let Some(f) = filter {
+            query = query.filter(f);
+        }
+
+        let paginator = query
+            .into_model::<T>()
+            .paginate(db, per_page);
+
+        let total_pages = paginator.num_pages().await?;
+        let items = paginator.fetch_page(page - 1).await?;
+
+        Ok((items, total_pages))
+    }
+
+    /// Get one by ID
+    pub async fn get_one<T>(
+        db: &DbConn,
+        id: {{ primary_key.rust_type }},
+        filter: Option<Condition>,
+    ) -> Result<Option<T>, DbErr>
+    where
+        T: FromQueryResult + Send + Sync,
+    {
+        let mut query = {{ table_name }}::Entity::find_by_id(id);
+
+        if let Some(f) = filter {
+            query = query.filter(f);
+        }
+
+        query.into_model::<T>().one(db).await
+    }
+
+    /// Get multiple records with filter
+    pub async fn get_many<T>(
+        db: &DbConn,
+        filter: Option<Condition>,
+    ) -> Result<Vec<T>, DbErr>
+    where
+        T: FromQueryResult + Send + Sync,
+    {
+        let mut query = {{ table_name }}::Entity::find();
+
+        if let Some(f) = filter {
+            query = query.filter(f);
+        }
+
+        query.into_model::<T>().all(db).await
+    }
+
+    /// Insert new record
+    pub async fn insert<C: ConnectionTrait>(
+        db: &C,
+        data: {{ table_name }}::ActiveModel,
+    ) -> Result<{{ table_name }}::Model, DbErr> {
+        data.insert(db).await
+    }
+
+    /// Update existing record by ID
+    pub async fn update<C: ConnectionTrait>(
+        db: &C,
+        id: {{ primary_key.rust_type }},
+        mut data: {{ table_name }}::ActiveModel,
+    ) -> Result<{{ table_name }}::Model, DbErr> {
+        // Check if record exists
+        {{ table_name }}::Entity::find_by_id(id)
+            .one(db)
+            .await?
+            .ok_or(DbErr::RecordNotFound("Record not found".to_string()))?;
+
+        // Set ID untuk update
+        data.{{ primary_key.name }} = Set(id);
+        data.update(db).await
+    }
+
+    /// Delete record by ID
+    pub async fn delete<C: ConnectionTrait>(
+        db: &C,
+        id: {{ primary_key.rust_type }},
+    ) -> Result<DeleteResult, DbErr> {
+        // Check if exists
+        let model = {{ table_name }}::Entity::find_by_id(id)
+            .one(db)
+            .await?
+            .ok_or(DbErr::RecordNotFound("Record not found".to_string()))?;
+
+        model.delete(db).await
+    }
+
+    /// Delete with filter
+    pub async fn delete_many<C: ConnectionTrait>(
+        db: &C,
+        filter: Condition,
+    ) -> Result<DeleteResult, DbErr> {
+        {{ table_name }}::Entity::delete_many()
+            .filter(filter)
+            .exec(db)
+            .await
+    }
+}
