@@ -18,7 +18,7 @@ impl MigrationTrait for Migration {
               .uuid()
               .not_null()
               .primary_key()
-              .default(Expr::cust("uuid_generate_v4()")),
+              .default(Expr::cust("gen_random_uuid()")),
           )
           .col(ColumnDef::new(Posts::UserId).uuid().not_null())
           .col(ColumnDef::new(Posts::Title).string().not_null())

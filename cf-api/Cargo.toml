@@ -1,7 +1,8 @@
 [package]
 name = "cf-api"
 version = "0.1.0"
-edition = "2024"
+edition.workspace = true
+rust-version.workspace = true
 
 [dependencies]
 common-auth = { git = "ssh://git@github.com/Crypto-Foundation-Dev/common-auth.git", features = [

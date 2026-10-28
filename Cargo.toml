@@ -8,6 +8,10 @@ members = [
     "cf-util",
 ]
 
+[workspace.package]
+edition = "2024"
+rust-version = "1.94.0"
+
 [workspace.dependencies]
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 dotenvy = "0.15"

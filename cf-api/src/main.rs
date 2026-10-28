@@ -4,7 +4,7 @@ use crate::routes::routes::main_routes;
 use crate::services::posts::PostService;
 use crate::services::users::UserService;
 use actix_cors::Cors;
-use actix_web::{web, App, HttpResponse, HttpServer};
+use actix_web::{App, HttpResponse, HttpServer, web};
 use cf_migration::{Migrator, MigratorTrait};
 use cf_util::intro;
 use dotenvy::dotenv;
@@ -81,7 +81,7 @@ async fn main() {
   let db_name = env::var("DATABASE_NAME").expect("DATABASE_NAME not set");
 
   let api_host = env::var("API_HOST").unwrap_or(String::from("0.0.0.0"));
-  let api_port = env::var("API_port").unwrap_or(String::from("3000"));
+  let api_port = env::var("API_PORT").unwrap_or(String::from("3000"));
 
   // Connect DB
   let db = match connect_db(db_host, db_username, db_password, db_port, db_name).await {

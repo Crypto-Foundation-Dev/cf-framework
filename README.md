@@ -4,32 +4,35 @@ A production-ready, modular Rust API framework designed for scalability and main
 
 ## 🚀 Features
 
-- **Modular Architecture**: Split into `api`, `entity`, `migration`, `repository`, and `util` crates.
+- **Modular Architecture**: Split into `cf-api`, `cf-entity`, `cf-migration`, `cf-repository`, and `cf-util` crates.
 - **REST API**: Built with Actix-web.
 - **ORM**: SeaORM for type-safe database interactions (PostgreSQL).
-- **Migrations**: Database schema migrations managed via SeaORM Migration.
+- **Migrations**: SeaORM Migration with a CLI (`up`, `down`, `status`, `fresh`, ...), similar to `php artisan migrate`.
 - **Documentation**: Auto-generated Swagger/OpenAPI documentation (`/swagger-ui`).
 - **Configuration**: Environment variable based configuration.
+- **Pinned Toolchain**: Rust version locked via `rust-toolchain.toml`.
 - **Containerization**: Optimized Dockerfile for production.
 - **CI/CD**: Jenkinsfile and Kubernetes manifests included.
 
 ## 📂 Project Structure
 
 ```
-├── api             # Main API server, handlers, services, routes, DTOs
-├── entity          # Database entities (SeaORM models)
-├── migration       # Database migrations
-├── repository      # Data access layer (Repositories)
-├── util            # Shared utilities (S3, Sanitization, etc.)
-├── k8s             # Kubernetes manifests
-├── Cargo.toml      # Workspace configuration
-└── Dockerfile      # Multi-stage Docker build
+├── cf-api              # Main API server, handlers, services, routes, DTOs
+├── cf-entity           # Database entities (SeaORM models)
+├── cf-migration        # Database migrations + migration CLI
+├── cf-repository       # Data access layer (Repositories)
+├── cf-util             # Shared utilities (S3, Sanitization, etc.)
+├── k8s                 # Kubernetes manifests
+├── Cargo.toml          # Workspace configuration
+├── rust-toolchain.toml # Pinned Rust version
+└── Dockerfile          # Multi-stage Docker build
 ```
 
 ## 🛠 Prerequisites
 
-- **Rust**: 1.75+
+- **Rust**: 1.94.0 (installed automatically by `rustup` from `rust-toolchain.toml`)
 - **PostgreSQL**: 14+
+- **SSH access** to `github.com/Crypto-Foundation-Dev/common-auth` (private dependency of `cf-api`)
 - **Docker** (optional)
 
 ## 🚦 Quick Start
@@ -42,39 +45,67 @@ Copy `.env.example` to `.env` and configure your database credentials:
 cp .env.example .env
 ```
 
-### 2. Run Database Migrations
+### 2. Create the Database
 
-```bash
-cargo run -p migration
+Create an empty database matching `DATABASE_NAME`. No extensions are required; tables are created by the migrations.
+
+```sql
+CREATE DATABASE your_database;
 ```
 
-### 3. Run the API Server
+### 3. Run Database Migrations
 
 ```bash
-cargo run -p api
+cargo run -p cf-migration
 ```
 
-The server will start at `http://localhost:3000`.
+### 4. Run the API Server
+
+```bash
+cargo run -p cf-api
+```
+
+The API also runs pending migrations on startup, so step 3 is optional for local development.
+
+The server will start at `http://localhost:3000` (configurable with `API_HOST` and `API_PORT`).
 
 - **Health Check**: `http://localhost:3000/health`
 - **Swagger UI**: `http://localhost:3000/swagger-ui/`
+
+## 🗄 Migrations
+
+| Command                                  | Description                               |
+| ---------------------------------------- | ----------------------------------------- |
+| `cargo run -p cf-migration`              | Apply all pending migrations (same as `up`) |
+| `cargo run -p cf-migration -- status`    | Show applied / pending migrations         |
+| `cargo run -p cf-migration -- down`      | Roll back the last migration              |
+| `cargo run -p cf-migration -- refresh`   | Roll back all, then apply all             |
+| `cargo run -p cf-migration -- reset`     | Roll back all migrations                  |
+| `cargo run -p cf-migration -- fresh`     | Drop all tables, then apply all (⚠️ deletes data) |
+
+The CLI builds the connection URL from the `DATABASE_*` variables in `.env`.
 
 ## 👨‍💻 Development
 
 ### Adding a New Entity
 
-1. Create a new migration in `migration/src/`.
-2. Create the entity file in `entity/src/entity/`.
-3. Register the entity in `entity/src/entity/mod.rs`.
+1. Create a new migration in `cf-migration/src/` and register it in `cf-migration/src/lib.rs`.
+   - Use `gen_random_uuid()` for UUID defaults (built into PostgreSQL 13+). Do not use `uuid_generate_v4()`, which requires the `uuid-ossp` extension.
+2. Create the entity file in `cf-entity/src/entity/`.
+3. Register the entity in `cf-entity/src/entity/mod.rs` and `prelude.rs`.
 
 ### Adding a New API Resource
 
-1. Create a Repository in `repository/src/repositories/`.
-2. Create DTOs in `api/src/dto/`.
-3. Create a Service in `api/src/services/`.
-4. Create a Handler in `api/src/handlers/`.
-5. Register Routes in `api/src/routes/`.
-6. Register the service in `api/src/main.rs`.
+1. Create a Repository in `cf-repository/src/repositories/` and re-export it in `mod.rs`.
+2. Create DTOs in `cf-api/src/dto/`.
+3. Create a Service in `cf-api/src/services/`.
+4. Create a Handler in `cf-api/src/handlers/`.
+5. Register Routes in `cf-api/src/routes/` and add the scope in `routes/routes.rs`.
+6. In `cf-api/src/main.rs`, register the handlers in `paths(...)`, the DTOs/models in `schemas(...)`, and the service with `app_data(...)`.
+
+### Upgrading Rust
+
+Update the version in `rust-toolchain.toml`, `rust-version` in the root `Cargo.toml`, and the `FROM rust:` image in `Dockerfile` in the same commit.
 
 ## 🐳 Docker Build
 
@@ -82,6 +113,8 @@ The server will start at `http://localhost:3000`.
 docker build -t cf-framework .
 docker run -p 3000:3000 --env-file .env cf-framework
 ```
+
+The container runs `cf-migration` and then starts `cf-api` (see `entrypoint.sh`).
 
 ## 📦 Deployment
 

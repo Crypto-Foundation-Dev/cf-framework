@@ -16,7 +16,7 @@ impl MigrationTrait for Migration {
               .uuid()
               .not_null()
               .primary_key()
-              .default(Expr::cust("uuid_generate_v4()")), // Assuming pg_crypto is enabled
+              .default(Expr::cust("gen_random_uuid()")),
           )
           .col(ColumnDef::new(Users::Name).string().not_null())
           .col(
