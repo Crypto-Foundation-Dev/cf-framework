@@ -4,6 +4,7 @@ use crate::services::users::UserService;
 use crate::structs::generals::{Empty, PaginationParam};
 use crate::structs::response_api::ResponseApi;
 use actix_web::{HttpResponse, Responder, delete, get, post, put, web};
+use validator::Validate;
 
 #[utoipa::path(
     get,
@@ -19,8 +20,8 @@ pub async fn get_all_users(
   service: web::Data<UserService>,
   params: web::Query<PaginationParam>,
 ) -> Result<impl Responder, AppError> {
-  let page = params.page.unwrap_or(1);
-  let per_page = params.per_page.unwrap_or(10);
+  let page = params.page.unwrap_or(1).max(1);
+  let per_page = params.per_page.unwrap_or(10).clamp(1, 100);
 
   let (users, _total_pages) = service.get_all_users(page, per_page).await?;
   Ok(HttpResponse::Ok().json(ResponseApi {
@@ -66,6 +67,7 @@ pub async fn create_user(
   service: web::Data<UserService>,
   req: web::Json<CreateUserRequest>,
 ) -> Result<impl Responder, AppError> {
+  req.validate()?;
   let user = service.create_user(req.into_inner()).await?;
   Ok(HttpResponse::Created().json(ResponseApi {
     status: true,
@@ -89,6 +91,7 @@ pub async fn update_user(
   id: web::Path<uuid::Uuid>,
   req: web::Json<UpdateUserRequest>,
 ) -> Result<impl Responder, AppError> {
+  req.validate()?;
   let user = service.update_user(*id, req.into_inner()).await?;
   Ok(HttpResponse::Ok().json(ResponseApi {
     status: true,

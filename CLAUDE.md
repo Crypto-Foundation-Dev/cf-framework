@@ -47,7 +47,6 @@ cargo clippy --workspace
 ## Gotchas
 
 - `main.rs` baca `env::var("API_port")` (huruf kecil), jadi `API_PORT` di `.env` tidak terbaca; selalu default 3000.
-- Atribut `#[validate]` di DTO belum pernah dipanggil (`.validate()` tidak ada di handler/service).
 - `cf-repository/src/helpers/generator.rs` dan `templates/repository.tera` masih refer ke path/crate lama `hub-be-repository` / `hub-be-entity`; belum dipakai dan belum disesuaikan.
 - `Dockerfile` copy binary `cf-entity`, padahal `cf-entity` tidak punya `main.rs`, jadi binary itu cuma dummy `fn main() {}` dari stage cache.
 - Deploy: `Jenkinsfile` (agent `staging`, k3s) + manifest di `k8s/`.

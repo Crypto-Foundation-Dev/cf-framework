@@ -44,9 +44,11 @@ impl ResponseError for AppError {
       AppError::ValidationError(msg) => msg.clone(),
       AppError::Validator(err) => err.to_string(),
       AppError::NotFound(msg) => msg.clone(),
-      AppError::DatabaseError(msg) => msg.clone(),
-      AppError::InternalError(msg) => msg.clone(),
-      AppError::S3Error(msg) => msg.clone(),
+      // Internal details only go to the server log, never to the client
+      AppError::DatabaseError(_) | AppError::InternalError(_) | AppError::S3Error(_) => {
+        eprintln!("{}", self);
+        "Internal server error".to_string()
+      }
     };
 
     HttpResponse::build(self.status_code()).json(ResponseApi {

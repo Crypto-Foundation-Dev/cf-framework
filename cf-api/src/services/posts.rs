@@ -3,6 +3,7 @@ use crate::dto::posts::{CreatePostRequest, UpdatePostRequest};
 use cf_entity::entity::posts;
 use cf_entity::entity::sea_orm_active_enums::PostStatus;
 use cf_repository::repositories::PostsRepository;
+use cf_util::sanitize::sanitize_content_html_tiptap;
 use sea_orm::{DatabaseConnection, IntoActiveModel, Set};
 use std::sync::Arc;
 use uuid::Uuid;
@@ -39,7 +40,7 @@ impl PostService {
       id: Set(Uuid::new_v4()),
       user_id: Set(req.user_id),
       title: Set(req.title),
-      content: Set(req.content),
+      content: Set(sanitize_content_html_tiptap(&req.content)),
       status: Set(PostStatus::Draft),
       ..Default::default()
     };
@@ -65,7 +66,7 @@ impl PostService {
     }
 
     if let Some(content) = req.content {
-      post_model.content = Set(content);
+      post_model.content = Set(sanitize_content_html_tiptap(&content));
     }
 
     if let Some(status) = req.status {
