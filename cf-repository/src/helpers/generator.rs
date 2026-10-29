@@ -19,7 +19,7 @@ pub fn generate_mod_file(repos: &[String]) -> Result<(), Box<dyn std::error::Err
         ));
     }
 
-    let mod_path = "./hub-be-repository/src/repositories/mod.rs";
+    let mod_path = "./cf-repository/src/repositories/mod.rs";
     fs::write(mod_path, mod_content)?;
     println!("Generated: {}", mod_path);
 
@@ -38,7 +38,7 @@ pub fn generate_repository(
 
     let output = tera.render("repository.tera", &context)?;
 
-    let filename = format!("./hub-be-repository/src/repositories/{}_repository.rs", entity.table_name);
+    let filename = format!("./cf-repository/src/repositories/{}_repository.rs", entity.table_name);
     fs::write(&filename, output)?;
 
     println!("Generated: {}", filename);

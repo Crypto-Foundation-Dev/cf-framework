@@ -1,6 +1,6 @@
 use sea_orm::*;
 use sea_orm::prelude::*;
-use hub_be_entity::entity::{{ table_name }};
+use cf_entity::entity::{{ table_name }};
 
 #[allow(dead_code)]
 pub struct {{ entity_name }}Repository;

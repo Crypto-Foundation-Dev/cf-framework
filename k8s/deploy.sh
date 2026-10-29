@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Deployment script for hub-be to k3s
-# This script helps you deploy the hub-be application to your k3s cluster
+# Deployment script for framework to k3s
+# This script helps you deploy the framework application to your k3s cluster
 
 set -e
 
 echo "======================================"
-echo "hub-be k3s Deployment Script"
+echo "framework k3s Deployment Script"
 echo "======================================"
 echo ""
 
@@ -53,10 +53,10 @@ cat > k8s/secret.yaml << EOF
 apiVersion: v1
 kind: Secret
 metadata:
-  name: hub-be-secret
+  name: framework-secret
   namespace: default
   labels:
-    app: hub-be
+    app: framework
 type: Opaque
 stringData:
   DATABASE_USERNAME: "$DB_USER"
@@ -72,7 +72,7 @@ kubectl apply -f k8s/
 
 echo ""
 echo "⏳ Waiting for deployment to be ready..."
-kubectl rollout status deployment/hub-be --timeout=5m
+kubectl rollout status deployment/framework-template --timeout=5m
 
 echo ""
 echo "✅ Deployment complete!"
@@ -81,19 +81,19 @@ echo ""
 # Display status
 echo "📊 Deployment Status"
 echo "--------------------"
-kubectl get pods -l app=hub-be
+kubectl get pods -l app=framework
 echo ""
-kubectl get svc hub-be-service
+kubectl get svc framework-service
 echo ""
-kubectl get ingress hub-be-ingress
+kubectl get ingress framework-ingress
 
 echo ""
 echo "🔗 Your application should be available at:"
-echo "   https://hub-api.cryptofoundation.io"
+echo "   http://api.framework.local"
 echo ""
 echo "📝 To view logs:"
-echo "   kubectl logs -l app=hub-be --tail=100 -f"
+echo "   kubectl logs -l app=framework --tail=100 -f"
 echo ""
 echo "🔍 To check pod status:"
-echo "   kubectl describe pod -l app=hub-be"
+echo "   kubectl describe pod -l app=framework"
 echo ""

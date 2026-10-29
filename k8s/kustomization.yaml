@@ -11,7 +11,7 @@ resources:
   - ingress.yaml
 
 commonLabels:
-  app: hub-be
+  app: framework
   managed-by: kustomize
 
 # Optional: Add common annotations
@@ -20,5 +20,5 @@ commonLabels:
 
 # Optional: Image transformer (if you want to change image tags)
 # images:
-#   - name: hub-be
+#   - name: framework-template
 #     newTag: v1.0.0
