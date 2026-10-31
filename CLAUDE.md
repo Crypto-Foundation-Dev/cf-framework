@@ -14,7 +14,8 @@ cargo clippy --workspace
 
 - Package names pakai prefix `cf-` (`cf-api`, `cf-migration`, ...). README masih tulis `-p api` / `-p migration`, itu salah.
 - Migration CLI (SeaORM `run_cli`, URL dirakit dari `DATABASE_*`): `cargo run -p cf-migration -- [up|down|status|fresh|refresh|reset]`. Tanpa argumen = `up`. `cf-api` juga auto-run `Migrator::up` saat start.
-- Belum ada test sama sekali.
+- Belum ada test di crate workspace.
+- `cf-cli` (binary `cf`, `cf new <nama>`) ada di luar workspace (`exclude`), jadi jalankan dengan `--manifest-path cf-cli/Cargo.toml`. Baris yang mengandung kata `cf-cli` di `Cargo.toml`, `README.md`, dan `CLAUDE.md` dihapus otomatis dari project hasil scaffold, jadi tulis satu baris saja.
 - `cf-api` punya dependency `cf-auth` (tag v0.3.5) dan `cf-email` (tag v0.1.0) dari repo publik `Crypto-Foundation-Dev`, tapi keduanya belum dipakai di kode.
 
 ## Workspace

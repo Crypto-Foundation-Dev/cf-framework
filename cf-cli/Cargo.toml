@@ -1,0 +1,11 @@
+[package]
+name = "cf-cli"
+version = "0.1.0"
+edition = "2024"
+description = "Scaffold a new project from the CF Framework template"
+license = "MIT"
+repository = "https://github.com/Crypto-Foundation-Dev/cf-framework"
+
+[[bin]]
+name = "cf"
+path = "src/main.rs"

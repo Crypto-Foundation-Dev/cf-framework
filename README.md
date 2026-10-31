@@ -2,6 +2,8 @@
 
 A production-ready, modular Rust API framework designed for scalability and maintainability. Built with **Actix-web**, **SeaORM**, and **Utoipa**.
 
+Create a new project with `cf new my-app`, see [`cf-cli`](cf-cli/README.md).
+
 ## 🚀 Features
 
 - **Modular Architecture**: Split into `cf-api`, `cf-entity`, `cf-migration`, `cf-repository`, and `cf-util` crates.
@@ -17,6 +19,7 @@ A production-ready, modular Rust API framework designed for scalability and main
 ## 📂 Project Structure
 
 ```
+├── cf-cli              # Scaffolding CLI (`cf new`), outside the workspace
 ├── cf-api              # Main API server, handlers, services, routes, DTOs
 ├── cf-entity           # Database entities (SeaORM models)
 ├── cf-migration        # Database migrations + migration CLI
