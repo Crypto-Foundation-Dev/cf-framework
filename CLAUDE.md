@@ -15,7 +15,7 @@ cargo clippy --workspace
 - Package names pakai prefix `cf-` (`cf-api`, `cf-migration`, ...). README masih tulis `-p api` / `-p migration`, itu salah.
 - Migration CLI (SeaORM `run_cli`, URL dirakit dari `DATABASE_*`): `cargo run -p cf-migration -- [up|down|status|fresh|refresh|reset]`. Tanpa argumen = `up`. `cf-api` juga auto-run `Migrator::up` saat start.
 - Belum ada test sama sekali.
-- `cf-api` butuh SSH access ke private repo `Crypto-Foundation-Dev/common-auth` (tag v0.3.4) untuk build.
+- `cf-api` punya dependency `cf-auth` (tag v0.3.5) dan `cf-email` (tag v0.1.0) dari repo publik `Crypto-Foundation-Dev`, tapi keduanya belum dipakai di kode.
 
 ## Workspace
 

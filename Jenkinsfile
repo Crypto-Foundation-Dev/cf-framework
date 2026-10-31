@@ -22,9 +22,6 @@ pipeline {
         S3_HOST = credentials("s3-host")
         S3_REGION = credentials("s3-region")
         S3_BUCKET_NAME = "your-bucket-name"
-
-        // SSH key for private Git dependencies
-        SSH_PRIVATE_KEY = credentials("github-ssh-key")
     }
 
     stages {        
@@ -39,16 +36,8 @@ pipeline {
             steps {
                 echo "Building and importing Docker image..."
                 sh '''
-                    # Copy SSH key for Docker build (if needed)
-                    cat "$SSH_PRIVATE_KEY" > ./id_rsa
-                    chmod 600 ./id_rsa
-                    
-                    # Build with SSH key
                     docker build -t $IMAGE_TAG .
-                    
-                    # Clean up SSH key after build
-                    rm -f ./id_rsa
-                    
+
                     docker save -o $IMAGE_FILE $IMAGE_TAG
                     k3s ctr image import $IMAGE_FILE
                 '''

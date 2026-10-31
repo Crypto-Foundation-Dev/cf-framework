@@ -32,7 +32,6 @@ A production-ready, modular Rust API framework designed for scalability and main
 
 - **Rust**: 1.94.0 (installed automatically by `rustup` from `rust-toolchain.toml`)
 - **PostgreSQL**: 14+
-- **SSH access** to `github.com/Crypto-Foundation-Dev/common-auth` (private dependency of `cf-api`)
 - **Docker** (optional)
 
 ## 🚦 Quick Start

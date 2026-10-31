@@ -3,26 +3,6 @@ FROM rust:1.94.0-bookworm AS builder
 
 WORKDIR /usr/src/app
 
-# Install git and ssh client for private git dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    openssh-client \
-    && rm -rf /var/lib/apt/lists/*
-
-# Setup SSH for GitHub
-RUN mkdir -p /root/.ssh && \
-    ssh-keyscan github.com >> /root/.ssh/known_hosts
-
-# Copy SSH key (Requires id_rsa context)
-# COPY id_rsa /root/.ssh/id_rsa
-# RUN chmod 600 /root/.ssh/id_rsa
-
-# Configure git to use SSH
-RUN git config --global url."ssh://git@github.com/".insteadOf "https://github.com/"
-
-# Configure Cargo to use git CLI for fetching
-ENV CARGO_NET_GIT_FETCH_WITH_CLI=true
-
 # Copy only dependency files first for better layer caching
 COPY Cargo.toml Cargo.lock ./
 COPY cf-api/Cargo.toml ./cf-api/

@@ -5,10 +5,12 @@ edition.workspace = true
 rust-version.workspace = true
 
 [dependencies]
-common-auth = { git = "ssh://git@github.com/Crypto-Foundation-Dev/common-auth.git", features = [
+cf-auth = { git = "https://github.com/Crypto-Foundation-Dev/cf-auth.git", features = [
     "actix",
-], tag = "v0.3.4" }
-# common-auth = { path = "../../common-auth", features = ["actix"] } /// For local development
+], tag = "v0.3.5" }
+# cf-auth = { path = "../../cf-auth", features = ["actix"] } /// For local development
+cf-email = { git = "https://github.com/Crypto-Foundation-Dev/cf-email.git", tag = "v0.1.0" }
+# cf-email = { path = "../../cf-email" } /// For local development
 cf-migration = { path = "../cf-migration" }
 cf-repository = { path = "../cf-repository" }
 cf-util = { path = "../cf-util" }
